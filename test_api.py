@@ -4,9 +4,14 @@ import urllib.request
 import pytest
 
 
-
 @pytest.fixture(scope='module')
 def json_api():
+	"""
+    Gets json contents from URL and parses json to python dictionary
+
+	Yields:
+		dict: parsed json from URL
+	"""
 	url = 'https://api.tmsandbox.co.nz/v1/Categories/6327/Details.json?catalogue=false'
 	with urllib.request.urlopen(url) as details_json:
 		parsed_contents = json.loads(details_json.read())
@@ -16,6 +21,9 @@ def json_api():
 def test_name(json_api):
 	"""
 	Verify name field contains the text "Carbon credits"
+
+	Args:
+		json_api (dict): values from the api
 	"""
 	name = json_api.get('Name')
 	assert name is not None, "Name field not found"
@@ -25,6 +33,9 @@ def test_name(json_api):
 def test_can_relist(json_api):
 	"""
 	Verify CanRelist field contains the boolean "true"
+
+	Args:
+		json_api (dict): values from the api
 	"""
 	can_relist = json_api.get('CanRelist')
 	assert can_relist is not None, "CanRelist field not found"
@@ -35,6 +46,9 @@ def test_promotions_galley_description(json_api):
 	"""
 	Verify Promotions element with the name "Gallery" has Description field 
 	that contains the text "Good position in category"
+
+	Args:
+		json_api (dict): values from the api
 	"""
 	promotions = json_api.get('Promotions')
 	assert promotions is not None, "Promotions field not found"
